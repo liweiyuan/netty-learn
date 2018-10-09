@@ -1,5 +1,6 @@
 package com.learn.netty.client;
 
+import com.learn.netty.client.handler.ClientHandler;
 import com.learn.netty.client.handler.FirstClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -29,7 +30,9 @@ public class NettyConsumer {
                     @Override
                     public void initChannel(SocketChannel ch) {
                         //处理数据
-                        ch.pipeline().addLast(new FirstClientHandler());
+                        //ch.pipeline().addLast(new FirstClientHandler());
+                        //处理登陆
+                        ch.pipeline().addLast(new ClientHandler());
                     }
                 });
         connect(bootstrap, "127.0.0.1", 8000, MAX_RETRY);

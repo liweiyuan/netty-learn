@@ -2,6 +2,7 @@ package com.learn.netty.protocol.commond;
 
 import com.learn.netty.protocol.Packet;
 import com.learn.netty.protocol.request.LoginRequestPacket;
+import com.learn.netty.protocol.response.LoginResponsePacket;
 import com.learn.netty.serialize.Serializer;
 import com.learn.netty.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.learn.netty.protocol.commond.Command.LOGIN_REQUEST;
+import static com.learn.netty.protocol.commond.Command.LOGIN_RESPONSE;
 
 /**
  * @Author :lwy
@@ -22,18 +24,23 @@ public class PacketCodeC {
     //魔数
     private static final int MAGIC_NUMBER = 0x12345678;
 
-    private static final Map<Byte, Class<? extends Packet>> requestTypeMap;
+    private  final Map<Byte, Class<? extends Packet>> requestTypeMap;
 
-    private static final Map<Byte, Serializer> serializerMap;
+    private  final Map<Byte, Serializer> serializerMap;
 
-    static {
+    //单例模式
+    public static final PacketCodeC INSTANCE=new PacketCodeC();
+
+    public PacketCodeC() {
         requestTypeMap = new HashMap<>();
         requestTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        requestTypeMap.put(LOGIN_RESPONSE,LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
     }
+
 
     /**
      * 编码
@@ -42,6 +49,30 @@ public class PacketCodeC {
         //1.创建ByteBuf
         ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer(); //直接内存
 
+        //2.序列化java对象
+        byte[] bytes = Serializer.DEFAULT.serialize(packet);
+
+        //3.实际编码
+        byteBuf.writeInt(MAGIC_NUMBER);
+        byteBuf.writeByte(packet.getVersion());
+        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
+        byteBuf.writeByte(packet.getCommand());
+        //对象
+        byteBuf.writeInt(bytes.length);
+        byteBuf.writeBytes(bytes);
+
+        return byteBuf;
+    }
+
+    /**
+     * 编码
+     * @param alloc
+     * @param packet
+     * @return
+     */
+    public ByteBuf encode(ByteBufAllocator alloc, Packet packet) {
+        //1.创建ByteBuf
+        ByteBuf byteBuf = alloc.ioBuffer(); //直接内存
         //2.序列化java对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
@@ -94,4 +125,6 @@ public class PacketCodeC {
     private Serializer getSerializer(byte serializeAlgoritm) {
         return serializerMap.get(serializeAlgoritm);
     }
+
+
 }

@@ -8,4 +8,6 @@ package com.learn.netty.protocol.commond;
 public interface Command {
 
     Byte LOGIN_REQUEST = 1;
+
+    Byte LOGIN_RESPONSE = 2;
 }

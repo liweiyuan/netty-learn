@@ -8,12 +8,12 @@ import static com.learn.netty.protocol.commond.Command.LOGIN_REQUEST;
 /**
  * @Author :lwy
  * @Date : 2018/10/9 15:09
- * @Description :
+ * @Description :登陆消息格式
  */
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private Integer userId;
+    private String userId;
 
     private String userName;
 
@@ -24,11 +24,11 @@ public class LoginRequestPacket extends Packet {
         return LOGIN_REQUEST;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
