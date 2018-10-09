@@ -49,6 +49,7 @@ public class NettyConsumer {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
                 //开启控制台发送消息的线程
+                System.out.println(new Date() + ": 连接成功，启动控制台线程……");
                 Channel channel = ((ChannelFuture) future).channel();
 
                 startConsoleThread(channel);

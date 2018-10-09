@@ -1,7 +1,6 @@
 package com.learn.netty.server;
 
-import com.learn.netty.server.handler.FirstServerHandler;
-import com.learn.netty.server.handler.ServerHandler;
+import com.learn.netty.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -27,7 +26,18 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
                         //ch.pipeline().addLast(new FirstServerHandler());
-                        ch.pipeline().addLast(new ServerHandler());
+                        //服务端处理登录请求
+                        //ch.pipeline().addLast(new ServerHandler());
+
+                        //处理读数据的逻辑链
+                        ch.pipeline().addLast(new InBoundHandlerA())
+                                .addLast(new InBoundHandlerB())
+                                .addLast(new InBoundHandlerC());
+
+                        //处理写数据的逻辑链
+                        ch.pipeline().addLast(new OutBoundHandlerA())
+                                .addLast(new OutBoundHandlerB())
+                                .addLast(new OutBoundHandlerC());
                     }
                 });
 

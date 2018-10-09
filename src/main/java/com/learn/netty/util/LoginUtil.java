@@ -23,7 +23,7 @@ public class LoginUtil {
 
         //Attribute<Boolean> loginAttr = channel.attr(AttributeKey.newInstance("login"));
 
-        System.out.println("登陆状态:"+loginAttr.get());
+        //System.out.println("登陆状态:"+loginAttr.get());
         return loginAttr.get() != null;
     }
 }
