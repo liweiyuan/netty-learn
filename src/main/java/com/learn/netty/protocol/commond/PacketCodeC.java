@@ -2,7 +2,9 @@ package com.learn.netty.protocol.commond;
 
 import com.learn.netty.protocol.Packet;
 import com.learn.netty.protocol.request.LoginRequestPacket;
+import com.learn.netty.protocol.request.MessageRequestPacket;
 import com.learn.netty.protocol.response.LoginResponsePacket;
+import com.learn.netty.protocol.response.MessageResponsePacket;
 import com.learn.netty.serialize.Serializer;
 import com.learn.netty.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -11,8 +13,7 @@ import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.learn.netty.protocol.commond.Command.LOGIN_REQUEST;
-import static com.learn.netty.protocol.commond.Command.LOGIN_RESPONSE;
+import static com.learn.netty.protocol.commond.Command.*;
 
 /**
  * @Author :lwy
@@ -31,10 +32,14 @@ public class PacketCodeC {
     //单例模式
     public static final PacketCodeC INSTANCE=new PacketCodeC();
 
+
+    //TODO 后续可通过注解进行扫描
     public PacketCodeC() {
         requestTypeMap = new HashMap<>();
         requestTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         requestTypeMap.put(LOGIN_RESPONSE,LoginResponsePacket.class);
+        requestTypeMap.put(MESSAGE_REQUEST,MessageRequestPacket.class);
+        requestTypeMap.put(MESSAGE_RESPONSE,MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
