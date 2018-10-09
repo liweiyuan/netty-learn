@@ -93,6 +93,22 @@ public class PacketCodeC {
         return byteBuf;
     }
 
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
+        //2.序列化java对象
+        byte[] bytes = Serializer.DEFAULT.serialize(packet);
+
+        //3.实际编码
+        byteBuf.writeInt(MAGIC_NUMBER);
+        byteBuf.writeByte(packet.getVersion());
+        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
+        byteBuf.writeByte(packet.getCommand());
+        //对象
+        byteBuf.writeInt(bytes.length);
+        byteBuf.writeBytes(bytes);
+
+        return byteBuf;
+    }
+
     /**
      * 解码
      */

@@ -2,6 +2,10 @@ package com.learn.netty.client;
 
 import com.learn.netty.client.handler.ClientHandler;
 import com.learn.netty.client.handler.FirstClientHandler;
+import com.learn.netty.client.simple.handler.LoginResponseHandler;
+import com.learn.netty.client.simple.handler.MessageResponseHandler;
+import com.learn.netty.codec.PacketDecoder;
+import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.protocol.commond.PacketCodeC;
 import com.learn.netty.protocol.request.MessageRequestPacket;
 import com.learn.netty.util.LoginUtil;
@@ -36,10 +40,16 @@ public class NettyConsumer {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
-                        //处理数据
+                        //1.处理数据
                         //ch.pipeline().addLast(new FirstClientHandler());
-                        //处理登陆
-                        ch.pipeline().addLast(new ClientHandler());
+                        //2.3处理登陆
+                        //ch.pipeline().addLast(new ClientHandler());
+
+                        //4.剔除过多的if-else
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
         connect(bootstrap, "127.0.0.1", 8000, MAX_RETRY);

@@ -1,6 +1,10 @@
 package com.learn.netty.server;
 
+import com.learn.netty.codec.PacketDecoder;
+import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.server.handler.*;
+import com.learn.netty.server.simple.handler.LoginRequestHandler;
+import com.learn.netty.server.simple.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -25,19 +29,26 @@ public class NettyServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
-                        //ch.pipeline().addLast(new FirstServerHandler());
-                        //服务端处理登录请求
+                        //1.
+                        // ch.pipeline().addLast(new FirstServerHandler());
+                        //2.服务端处理登录请求
                         //ch.pipeline().addLast(new ServerHandler());
 
-                        //处理读数据的逻辑链
-                        ch.pipeline().addLast(new InBoundHandlerA())
-                                .addLast(new InBoundHandlerB())
-                                .addLast(new InBoundHandlerC());
+                        //3.处理读数据的逻辑链
+                        //ch.pipeline().addLast(new InBoundHandlerA())
+                                //.addLast(new InBoundHandlerB())
+                                //.addLast(new InBoundHandlerC());
 
                         //处理写数据的逻辑链
-                        ch.pipeline().addLast(new OutBoundHandlerA())
-                                .addLast(new OutBoundHandlerB())
-                                .addLast(new OutBoundHandlerC());
+                        //ch.pipeline().addLast(new OutBoundHandlerA())
+                                //.addLast(new OutBoundHandlerB())
+                                //.addLast(new OutBoundHandlerC());
+                        //4.使用pipeline连自动处理，避免过多的if-else
+
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginRequestHandler());
+                        ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
 
