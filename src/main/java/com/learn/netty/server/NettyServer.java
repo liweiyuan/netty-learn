@@ -3,6 +3,7 @@ package com.learn.netty.server;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
+import com.learn.netty.server.simple.handler.LifeCyCleTestHandler;
 import com.learn.netty.server.simple.handler.LoginRequestHandler;
 import com.learn.netty.server.simple.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -49,6 +50,9 @@ public class NettyServer {
                         //ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         //6.增加数据校验(魔数校验)
                         ch.pipeline().addLast(new Spliter());
+
+                        //7.channelHandler生命周期
+                        ch.pipeline().addLast(new LifeCyCleTestHandler());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
