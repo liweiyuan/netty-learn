@@ -59,6 +59,11 @@ public class NettyServer {
 
                         //9.新增群聊功能
                         ch.pipeline().addLast(new CreateGroupRequestHandler());
+                        // 加群请求处理器
+                        ch.pipeline().addLast(new JoinGroupRequestHandler());
+                        // 退群请求处理器
+                        ch.pipeline().addLast(new QuitGroupRequestHandler());
+
                         ch.pipeline().addLast(new LogoutRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }

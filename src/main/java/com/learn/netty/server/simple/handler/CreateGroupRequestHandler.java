@@ -43,11 +43,14 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         CreateGroupResponsePacket responsePacket=new CreateGroupResponsePacket();
         responsePacket.setUserNameList(userNameList);
         responsePacket.setSuccess(true);
-        responsePacket.setGroupId(UUID.randomUUID().toString());
+        responsePacket.setGroupId(UUID.randomUUID().toString().split("-")[1]);
         // 4. 给每个客户端发送拉群通知
         channels.writeAndFlush(responsePacket);
 
         System.out.print("群创建成功，id 为[" + responsePacket.getGroupId() + "], ");
         System.out.println("群里面有：" + responsePacket.getUserNameList());
+
+        // 5. 保存群组相关的信息
+        SessionUtil.bindChannelGroup(responsePacket.getGroupId(), channels);
     }
 }

@@ -1,9 +1,6 @@
 package com.learn.netty.console.manager;
 
-import com.learn.netty.console.ConsoleCommand;
-import com.learn.netty.console.CreateGroupConsoleCommand;
-import com.learn.netty.console.LogoutConsoleCommand;
-import com.learn.netty.console.SendToUserConsoleCommand;
+import com.learn.netty.console.*;
 import io.netty.channel.Channel;
 
 
@@ -25,6 +22,8 @@ public class ConsoleCommandManager implements ConsoleCommand {
         consoleCommandMap.put("sendToUser", new SendToUserConsoleCommand());
         consoleCommandMap.put("logout", new LogoutConsoleCommand());
         consoleCommandMap.put("createGroup", new CreateGroupConsoleCommand());
+        consoleCommandMap.put("joinGroup",new JoinGroupConsoleCommand());
+        consoleCommandMap.put("quitGroup",new QuitGroupConsoleCommand());
     }
 
     @Override

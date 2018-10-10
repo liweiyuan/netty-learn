@@ -3,6 +3,7 @@ package com.learn.netty.util;
 import com.learn.netty.attribute.Attributes;
 import com.learn.netty.session.Session;
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.util.Attribute;
 
 import java.util.Map;
@@ -16,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionUtil {
 
     private static final Map<String, Channel> userIdChannelMap = new ConcurrentHashMap<>();
+
+    private static final Map<String, ChannelGroup> groupIdChannelGroupMap = new ConcurrentHashMap<>();
 
     /**
      * 绑定Session
@@ -68,5 +71,17 @@ public class SessionUtil {
      */
     public static Session getSession(Channel channel) {
         return channel.attr(Attributes.SESSION).get();
+    }
+
+    //
+    /**
+     * 添加至群与退出
+     */
+    public static void bindChannelGroup(String groupId, ChannelGroup channelGroup) {
+        groupIdChannelGroupMap.put(groupId, channelGroup);
+    }
+
+    public static ChannelGroup getChannelGroup(String groupId) {
+        return groupIdChannelGroupMap.get(groupId);
     }
 }

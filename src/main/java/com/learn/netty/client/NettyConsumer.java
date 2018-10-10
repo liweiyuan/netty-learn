@@ -1,9 +1,6 @@
 package com.learn.netty.client;
 
-import com.learn.netty.client.simple.handler.CreateGroupResponseHandler;
-import com.learn.netty.client.simple.handler.LoginResponseHandler;
-import com.learn.netty.client.simple.handler.LogoutResponseHandler;
-import com.learn.netty.client.simple.handler.MessageResponseHandler;
+import com.learn.netty.client.simple.handler.*;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
@@ -57,11 +54,16 @@ public class NettyConsumer {
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
 
-                        //8.创建群聊
-                        ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
-
+                        //8.创建群聊
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
+                        // 加群响应处理器
+                        ch.pipeline().addLast(new JoinGroupResponseHandler());
+
+                        // 退群响应处理器
+                        ch.pipeline().addLast(new QuitGroupResponseHandler());
+                        ch.pipeline().addLast(new LogoutResponseHandler());
+
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
