@@ -62,6 +62,10 @@ public class NettyConsumer {
 
                         // 退群响应处理器
                         ch.pipeline().addLast(new QuitGroupResponseHandler());
+
+                        // 获取群成员响应处理器
+                        ch.pipeline().addLast(new ListGroupMembersResponseHandler());
+
                         ch.pipeline().addLast(new LogoutResponseHandler());
 
                         ch.pipeline().addLast(new PacketEncoder());

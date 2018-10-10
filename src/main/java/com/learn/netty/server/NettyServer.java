@@ -1,5 +1,6 @@
 package com.learn.netty.server;
 
+import com.learn.netty.server.simple.handler.ListGroupMembersRequestHandler;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
@@ -63,6 +64,9 @@ public class NettyServer {
                         ch.pipeline().addLast(new JoinGroupRequestHandler());
                         // 退群请求处理器
                         ch.pipeline().addLast(new QuitGroupRequestHandler());
+
+                        // 获取群成员请求处理器
+                        ch.pipeline().addLast(new ListGroupMembersRequestHandler());
 
                         ch.pipeline().addLast(new LogoutRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
