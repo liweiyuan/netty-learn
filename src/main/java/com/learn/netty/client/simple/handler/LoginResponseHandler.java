@@ -36,6 +36,7 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         packet.setUserName("wade");
         packet.setPassword("bosh");
 
+        //TODO 测试校验登陆的逻辑
         ctx.channel().writeAndFlush(packet);
     }
 

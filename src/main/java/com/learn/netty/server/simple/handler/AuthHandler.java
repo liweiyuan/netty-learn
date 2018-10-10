@@ -18,7 +18,7 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
         //校验成功后，不需要再次校验。
         if (!LoginUtil.hasLogin(ctx.channel())) {
 
-            System.err.println("校验结果");
+            //System.err.println("校验结果");
             ctx.channel().close();
         } else {
 
