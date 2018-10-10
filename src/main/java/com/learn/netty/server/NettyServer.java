@@ -3,6 +3,7 @@ package com.learn.netty.server;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
+import com.learn.netty.server.simple.handler.AuthHandler;
 import com.learn.netty.server.simple.handler.LifeCyCleTestHandler;
 import com.learn.netty.server.simple.handler.LoginRequestHandler;
 import com.learn.netty.server.simple.handler.MessageRequestHandler;
@@ -12,7 +13,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 public class NettyServer {
 
@@ -52,9 +52,12 @@ public class NettyServer {
                         ch.pipeline().addLast(new Spliter());
 
                         //7.channelHandler生命周期
-                        ch.pipeline().addLast(new LifeCyCleTestHandler());
+                        //ch.pipeline().addLast(new LifeCyCleTestHandler());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
+
+                        //8.新增用户校验认证handler
+                        ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }

@@ -2,6 +2,7 @@ package com.learn.netty.server.simple.handler;
 
 import com.learn.netty.protocol.request.LoginRequestPacket;
 import com.learn.netty.protocol.response.LoginResponsePacket;
+import com.learn.netty.util.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -24,6 +25,9 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             loginResponsePacket.setSuccess(true);
             loginResponsePacket.setReason("登陆成功");
             System.out.println(new Date() + ": 登录成功!");
+
+            //设置登陆成功标值
+            LoginUtil.markAsLogin(ctx.channel());
         } else {
             loginResponsePacket.setSuccess(false);
             loginResponsePacket.setReason("账号密码不正确");

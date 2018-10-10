@@ -3,7 +3,12 @@ package com.learn.netty.server.simple.handler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
+
+    private static volatile AtomicInteger connectCounter=new AtomicInteger(0);
+
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         System.out.println("逻辑处理器被添加：handlerAdded()");
@@ -19,6 +24,8 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channel 准备就绪：channelActive()");
+        int count = connectCounter.incrementAndGet();
+        System.err.println("当前的连接数： "+count);
         super.channelActive(ctx);
     }
 
@@ -31,6 +38,7 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channel 某次数据读完：channelReadComplete()");
+
         super.channelReadComplete(ctx);
 
     }
@@ -38,6 +46,8 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channel 被关闭：channelInactive()");
+        int count = connectCounter.decrementAndGet();
+        System.err.println("当前的连接数： "+count);
         super.channelInactive(ctx);
     }
 

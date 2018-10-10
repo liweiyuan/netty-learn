@@ -3,7 +3,6 @@ package com.learn.netty.util;
 import com.learn.netty.attribute.Attributes;
 import io.netty.channel.Channel;
 import io.netty.util.Attribute;
-import io.netty.util.AttributeKey;
 
 /**
  * @Author :lwy

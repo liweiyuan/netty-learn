@@ -96,7 +96,7 @@ public class NettyConsumer {
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                if (LoginUtil.hasLogin(channel)) {
+                //if (LoginUtil.hasLogin(channel)) {
                     System.err.println("输入消息至服务端");
                     Scanner scanner = new Scanner(System.in);
                     String line = scanner.nextLine();
@@ -107,7 +107,7 @@ public class NettyConsumer {
                     ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
 
                     channel.writeAndFlush(byteBuf);
-                }
+               // }
             }
         }).start();
     }
