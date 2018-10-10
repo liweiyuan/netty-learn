@@ -1,9 +1,13 @@
 package com.learn.netty.protocol.commond;
 
 import com.learn.netty.protocol.Packet;
+import com.learn.netty.protocol.request.CreateGroupRequestPacket;
 import com.learn.netty.protocol.request.LoginRequestPacket;
+import com.learn.netty.protocol.request.LogoutRequestPacket;
 import com.learn.netty.protocol.request.MessageRequestPacket;
+import com.learn.netty.protocol.response.CreateGroupResponsePacket;
 import com.learn.netty.protocol.response.LoginResponsePacket;
+import com.learn.netty.protocol.response.LogoutResponsePacket;
 import com.learn.netty.protocol.response.MessageResponsePacket;
 import com.learn.netty.serialize.Serializer;
 import com.learn.netty.serialize.impl.JSONSerializer;
@@ -25,7 +29,7 @@ public class PacketCodeC {
     //魔数
     public static final int MAGIC_NUMBER = 0x12345678;
 
-    private final Map<Byte, Class<? extends Packet>> requestTypeMap;
+    private final Map<Byte, Class<? extends Packet>> packetTypeMap;
 
     private final Map<Byte, Serializer> serializerMap;
 
@@ -35,11 +39,15 @@ public class PacketCodeC {
 
     //TODO 后续可通过注解进行扫描
     public PacketCodeC() {
-        requestTypeMap = new HashMap<>();
-        requestTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
-        requestTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
-        requestTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
-        requestTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap = new HashMap<>();
+        packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
@@ -148,7 +156,7 @@ public class PacketCodeC {
 
 
     private Class<? extends Packet> getRequestType(byte command) {
-        return requestTypeMap.get(command);
+        return packetTypeMap.get(command);
     }
 
     private Serializer getSerializer(byte serializeAlgorithm) {

@@ -1,10 +1,14 @@
 package com.learn.netty.client;
 
+import com.learn.netty.client.simple.handler.CreateGroupResponseHandler;
 import com.learn.netty.client.simple.handler.LoginResponseHandler;
+import com.learn.netty.client.simple.handler.LogoutResponseHandler;
 import com.learn.netty.client.simple.handler.MessageResponseHandler;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
+import com.learn.netty.console.LoginConsoleCommand;
+import com.learn.netty.console.manager.ConsoleCommandManager;
 import com.learn.netty.protocol.commond.PacketCodeC;
 import com.learn.netty.protocol.request.LoginRequestPacket;
 import com.learn.netty.protocol.request.MessageRequestPacket;
@@ -52,7 +56,12 @@ public class NettyConsumer {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
+
+                        //8.创建群聊
+                        ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
+
+                        ch.pipeline().addLast(new CreateGroupResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -84,12 +93,29 @@ public class NettyConsumer {
         });
     }
 
+
+
+    private static void startConsoleThread(Channel channel) {
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
+        Scanner scanner = new Scanner(System.in);
+
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (!SessionUtil.hasLogin(channel)) {
+                    loginConsoleCommand.exec(scanner, channel);
+                } else {
+                    consoleCommandManager.exec(scanner, channel);
+                }
+            }
+        }).start();
+    }
     /**
      * 启动控制台线程
      *
      * @param channel
      */
-    private static void startConsoleThread(Channel channel) {
+    /*private static void startConsoleThread(Channel channel) {
         Scanner scanner = new Scanner(System.in);
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
@@ -118,7 +144,7 @@ public class NettyConsumer {
                 }
             }
         }).start();
-    }
+    }*/
 
     private static void waitForLoginResponse() {
         try {

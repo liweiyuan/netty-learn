@@ -3,9 +3,7 @@ package com.learn.netty.server;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
-import com.learn.netty.server.simple.handler.AuthHandler;
-import com.learn.netty.server.simple.handler.LoginRequestHandler;
-import com.learn.netty.server.simple.handler.MessageRequestHandler;
+import com.learn.netty.server.simple.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -58,6 +56,10 @@ public class NettyServer {
                         //8.新增用户校验认证handler
                         ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
+
+                        //9.新增群聊功能
+                        ch.pipeline().addLast(new CreateGroupRequestHandler());
+                        ch.pipeline().addLast(new LogoutRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
