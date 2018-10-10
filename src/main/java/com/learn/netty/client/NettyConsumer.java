@@ -17,6 +17,8 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.FixedLengthFrameDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -46,6 +48,8 @@ public class NettyConsumer {
                         //ch.pipeline().addLast(new ClientHandler());
 
                         //4.剔除过多的if-else
+                        //5.添加拆包粘包
+                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
@@ -97,7 +101,7 @@ public class NettyConsumer {
                     MessageRequestPacket messageRequestPacket = new
                             MessageRequestPacket();
                     messageRequestPacket.setMessage(line);
-                    ByteBuf byteBuf=PacketCodeC.INSTANCE.encode(channel.alloc(),messageRequestPacket);
+                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
 
                     channel.writeAndFlush(byteBuf);
                 }

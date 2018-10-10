@@ -10,6 +10,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 public class NettyServer {
 
@@ -43,7 +44,8 @@ public class NettyServer {
                                 //.addLast(new OutBoundHandlerB())
                                 //.addLast(new OutBoundHandlerC());
                         //4.使用pipeline连自动处理，避免过多的if-else
-
+                        //5.添加拆包粘包
+                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
