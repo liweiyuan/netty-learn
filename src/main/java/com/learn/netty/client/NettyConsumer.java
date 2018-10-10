@@ -6,6 +6,7 @@ import com.learn.netty.client.simple.handler.LoginResponseHandler;
 import com.learn.netty.client.simple.handler.MessageResponseHandler;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
+import com.learn.netty.common.handler.Spliter;
 import com.learn.netty.protocol.commond.PacketCodeC;
 import com.learn.netty.protocol.request.MessageRequestPacket;
 import com.learn.netty.util.LoginUtil;
@@ -49,7 +50,9 @@ public class NettyConsumer {
 
                         //4.剔除过多的if-else
                         //5.添加拆包粘包
-                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+                        //ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+                        //6.增加数据校验(魔数校验)
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());

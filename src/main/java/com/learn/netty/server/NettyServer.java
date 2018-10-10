@@ -2,6 +2,7 @@ package com.learn.netty.server;
 
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
+import com.learn.netty.common.handler.Spliter;
 import com.learn.netty.server.simple.handler.LoginRequestHandler;
 import com.learn.netty.server.simple.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -45,7 +46,9 @@ public class NettyServer {
                                 //.addLast(new OutBoundHandlerC());
                         //4.使用pipeline连自动处理，避免过多的if-else
                         //5.添加拆包粘包
-                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+                        //ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+                        //6.增加数据校验(魔数校验)
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
