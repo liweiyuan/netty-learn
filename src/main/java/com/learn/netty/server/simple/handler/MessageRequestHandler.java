@@ -1,13 +1,9 @@
 package com.learn.netty.server.simple.handler;
 
-import com.learn.netty.protocol.commond.PacketCodeC;
 import com.learn.netty.protocol.request.MessageRequestPacket;
 import com.learn.netty.protocol.response.MessageResponsePacket;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.Date;
 
@@ -23,7 +19,7 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
 
         MessageResponsePacket responsePacket=new MessageResponsePacket();
         responsePacket.setMessage("服务端回复【" + msg.getMessage() + "】");
-        ByteBuf buf=PacketCodeC.INSTANCE.encode(ctx.alloc(),responsePacket);
-        ctx.channel().writeAndFlush(buf);
+        //ByteBuf buf=PacketCodeC.INSTANCE.encode(ctx.alloc(),responsePacket);
+        ctx.channel().writeAndFlush(responsePacket);
     }
 }
