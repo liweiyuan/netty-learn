@@ -13,7 +13,18 @@ import static com.learn.netty.protocol.commond.Command.MESSAGE_REQUEST;
 @Data
 public class MessageRequestPacket extends Packet {
 
+    //指向要发送消息的userId
+    private String toUserId;
+
     private String message;
+
+    public MessageRequestPacket() {
+    }
+
+    public MessageRequestPacket(String toUserId, String message) {
+        this.toUserId = toUserId;
+        this.message = message;
+    }
 
     @Override
     public Byte getCommand() {
@@ -25,6 +36,15 @@ public class MessageRequestPacket extends Packet {
     }
 
     public void setMessage(String message) {
+
         this.message = message;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 }

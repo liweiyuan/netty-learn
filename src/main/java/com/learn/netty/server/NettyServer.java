@@ -4,7 +4,6 @@ import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
 import com.learn.netty.server.simple.handler.AuthHandler;
-import com.learn.netty.server.simple.handler.LifeCyCleTestHandler;
 import com.learn.netty.server.simple.handler.LoginRequestHandler;
 import com.learn.netty.server.simple.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;

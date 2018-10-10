@@ -5,7 +5,7 @@ import com.learn.netty.protocol.commond.PacketCodeC;
 import com.learn.netty.protocol.request.LoginRequestPacket;
 import com.learn.netty.protocol.response.LoginResponsePacket;
 import com.learn.netty.protocol.response.MessageResponsePacket;
-import com.learn.netty.util.LoginUtil;
+import com.learn.netty.util.SessionUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -51,7 +51,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             if (loginResponsePacket.isSuccess()) {
 
                 //登陆成功后，设置标志位
-                LoginUtil.markAsLogin(ctx.channel());
+                SessionUtil.markAsLogin(ctx.channel());
                 System.out.println(new Date() + ": 客户端登录成功");
             } else {
                 System.out.println(new Date() + ": 客户端登录失败，原因：" + loginResponsePacket.getReason());

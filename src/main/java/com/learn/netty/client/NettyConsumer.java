@@ -1,15 +1,14 @@
 package com.learn.netty.client;
 
-import com.learn.netty.client.handler.ClientHandler;
-import com.learn.netty.client.handler.FirstClientHandler;
 import com.learn.netty.client.simple.handler.LoginResponseHandler;
 import com.learn.netty.client.simple.handler.MessageResponseHandler;
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
 import com.learn.netty.common.handler.Spliter;
 import com.learn.netty.protocol.commond.PacketCodeC;
+import com.learn.netty.protocol.request.LoginRequestPacket;
 import com.learn.netty.protocol.request.MessageRequestPacket;
-import com.learn.netty.util.LoginUtil;
+import com.learn.netty.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -18,8 +17,6 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.FixedLengthFrameDecoder;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -93,22 +90,40 @@ public class NettyConsumer {
      * @param channel
      */
     private static void startConsoleThread(Channel channel) {
+        Scanner scanner = new Scanner(System.in);
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                //if (LoginUtil.hasLogin(channel)) {
-                    System.err.println("输入消息至服务端");
-                    Scanner scanner = new Scanner(System.in);
-                    String line = scanner.nextLine();
 
-                    MessageRequestPacket messageRequestPacket = new
-                            MessageRequestPacket();
-                    messageRequestPacket.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
+                //创建连接
+                if (!SessionUtil.hasLogin(channel)) {
+                    System.err.println("输入用户名登陆");
 
-                    channel.writeAndFlush(byteBuf);
-               // }
+                    String userName = scanner.nextLine();
+                    loginRequestPacket.setUserName(userName);
+                    //密码
+                    loginRequestPacket.setPassword("wade");
+
+                    channel.writeAndFlush(loginRequestPacket);
+
+                    //睡眠
+                    waitForLoginResponse();
+                } else {
+
+                    //发送消息格式
+                    String toUserId = scanner.next();
+                    String message = scanner.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                }
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }
