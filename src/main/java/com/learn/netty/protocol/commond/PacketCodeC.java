@@ -1,14 +1,8 @@
 package com.learn.netty.protocol.commond;
 
 import com.learn.netty.protocol.Packet;
-import com.learn.netty.protocol.request.CreateGroupRequestPacket;
-import com.learn.netty.protocol.request.LoginRequestPacket;
-import com.learn.netty.protocol.request.LogoutRequestPacket;
-import com.learn.netty.protocol.request.MessageRequestPacket;
-import com.learn.netty.protocol.response.CreateGroupResponsePacket;
-import com.learn.netty.protocol.response.LoginResponsePacket;
-import com.learn.netty.protocol.response.LogoutResponsePacket;
-import com.learn.netty.protocol.response.MessageResponsePacket;
+import com.learn.netty.protocol.request.*;
+import com.learn.netty.protocol.response.*;
 import com.learn.netty.serialize.Serializer;
 import com.learn.netty.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -48,6 +42,12 @@ public class PacketCodeC {
         packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
         packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
+        packetTypeMap.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+        packetTypeMap.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
+        packetTypeMap.put(LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
+        packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
