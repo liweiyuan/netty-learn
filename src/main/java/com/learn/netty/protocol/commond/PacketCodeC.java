@@ -25,21 +25,21 @@ public class PacketCodeC {
     //魔数
     private static final int MAGIC_NUMBER = 0x12345678;
 
-    private  final Map<Byte, Class<? extends Packet>> requestTypeMap;
+    private final Map<Byte, Class<? extends Packet>> requestTypeMap;
 
-    private  final Map<Byte, Serializer> serializerMap;
+    private final Map<Byte, Serializer> serializerMap;
 
     //单例模式
-    public static final PacketCodeC INSTANCE=new PacketCodeC();
+    public static final PacketCodeC INSTANCE = new PacketCodeC();
 
 
     //TODO 后续可通过注解进行扫描
     public PacketCodeC() {
         requestTypeMap = new HashMap<>();
         requestTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
-        requestTypeMap.put(LOGIN_RESPONSE,LoginResponsePacket.class);
-        requestTypeMap.put(MESSAGE_REQUEST,MessageRequestPacket.class);
-        requestTypeMap.put(MESSAGE_RESPONSE,MessageResponsePacket.class);
+        requestTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        requestTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        requestTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
@@ -71,6 +71,7 @@ public class PacketCodeC {
 
     /**
      * 编码
+     *
      * @param alloc
      * @param packet
      * @return
@@ -93,6 +94,13 @@ public class PacketCodeC {
         return byteBuf;
     }
 
+    /**
+     * 直接去除ByteBuf生成过程
+     *
+     * @param byteBuf
+     * @param packet
+     * @return
+     */
     public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
         //2.序列化java对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
@@ -118,7 +126,7 @@ public class PacketCodeC {
         //版本
         byteBuf.skipBytes(1);
         //序列化表示
-        byte serializeAlgoritm = byteBuf.readByte();
+        byte serializeAlgorithm = byteBuf.readByte();
         //指令
         byte command = byteBuf.readByte();
         //数据包长度
@@ -128,23 +136,23 @@ public class PacketCodeC {
         byteBuf.readBytes(bytes);
 
         //获取指令（请求类型）
-        Class<? extends Packet> requestType=getRequestType(command);
+        Class<? extends Packet> requestType = getRequestType(command);
         //获取编码类型
-        Serializer serializer=getSerializer(serializeAlgoritm);
+        Serializer serializer = getSerializer(serializeAlgorithm);
 
-        if(requestType!=null&& serializer!=null){
-            return serializer.deserialize(requestType,bytes);
+        if (requestType != null && serializer != null) {
+            return serializer.deserialize(requestType, bytes);
         }
         return null;
     }
 
 
-
     private Class<? extends Packet> getRequestType(byte command) {
         return requestTypeMap.get(command);
     }
-    private Serializer getSerializer(byte serializeAlgoritm) {
-        return serializerMap.get(serializeAlgoritm);
+
+    private Serializer getSerializer(byte serializeAlgorithm) {
+        return serializerMap.get(serializeAlgorithm);
     }
 
 

@@ -2,7 +2,6 @@ package com.learn.netty.server;
 
 import com.learn.netty.codec.PacketDecoder;
 import com.learn.netty.codec.PacketEncoder;
-import com.learn.netty.server.handler.*;
 import com.learn.netty.server.simple.handler.LoginRequestHandler;
 import com.learn.netty.server.simple.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -53,15 +52,15 @@ public class NettyServer {
                 });
 
 
-        bind(serverBootstrap, PORT);
+        bind(serverBootstrap);
     }
 
-    private static void bind(final ServerBootstrap serverBootstrap, final int port) {
-        serverBootstrap.bind(port).addListener(future -> {
+    private static void bind(final ServerBootstrap serverBootstrap) {
+        serverBootstrap.bind(NettyServer.PORT).addListener(future -> {
             if (future.isSuccess()) {
-                System.out.println("端口[" + port + "]绑定成功!");
+                System.out.println("端口[" + NettyServer.PORT + "]绑定成功!");
             } else {
-                System.err.println("端口[" + port + "]绑定失败!");
+                System.err.println("端口[" + NettyServer.PORT + "]绑定失败!");
             }
         });
     }
