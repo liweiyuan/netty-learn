@@ -66,6 +66,9 @@ public class NettyConsumer {
                         // 获取群成员响应处理器
                         ch.pipeline().addLast(new ListGroupMembersResponseHandler());
 
+                        // 群聊消息handler
+                        ch.pipeline().addLast(new GroupMessageResponseHandler());
+
                         ch.pipeline().addLast(new LogoutResponseHandler());
 
                         ch.pipeline().addLast(new PacketEncoder());
@@ -119,7 +122,6 @@ public class NettyConsumer {
     /**
      * 启动控制台线程
      *
-     * @param channel
      */
     /*private static void startConsoleThread(Channel channel) {
         Scanner scanner = new Scanner(System.in);

@@ -68,6 +68,9 @@ public class NettyServer {
                         // 获取群成员请求处理器
                         ch.pipeline().addLast(new ListGroupMembersRequestHandler());
 
+                        // 成员聊天
+                        ch.pipeline().addLast(new GroupMessageRequestHandler());
+
                         ch.pipeline().addLast(new LogoutRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
